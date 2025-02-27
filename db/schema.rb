@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_26_204517) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_27_003555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_26_204517) do
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "price", precision: 10, scale: 2, default: "0.0"
     t.index ["category_id"], name: "index_foods_on_category_id"
   end
 
@@ -56,6 +57,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_26_204517) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["food_id"], name: "index_ingredients_on_food_id"
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "food_id", null: false
+    t.bigint "order_id", null: false
+    t.integer "quantity"
+    t.decimal "price", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "chef_id", null: false
+    t.string "status"
+    t.index ["chef_id"], name: "index_order_items_on_chef_id"
+    t.index ["food_id"], name: "index_order_items_on_food_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "order_time"
+    t.string "order_status"
+    t.decimal "total_price", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "owners", force: :cascade do |t|
@@ -96,4 +121,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_26_204517) do
   add_foreign_key "chefs", "categories"
   add_foreign_key "foods", "categories"
   add_foreign_key "ingredients", "foods"
+  add_foreign_key "order_items", "chefs"
+  add_foreign_key "order_items", "foods"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "orders", "users"
 end

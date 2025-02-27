@@ -1,4 +1,8 @@
 class Chef < ApplicationRecord
+  has_many :order_items
+  has_many :foods, through: :order_items
+  has_many :orders, through: :order_items
+  belongs_to :category
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   include Devise::JWT::RevocationStrategies::JTIMatcher

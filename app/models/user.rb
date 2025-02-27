@@ -1,4 +1,8 @@
 class User < ApplicationRecord
+  has_many :orders
+  has_many :order_items, through: :orders
+  has_many :foods, through: :order_items
+
   include Devise::JWT::RevocationStrategies::JTIMatcher
   devise :database_authenticatable, :registerable, :recoverable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 

@@ -5,11 +5,22 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api do
   namespace :v1 do
+    post "user/create_order", to: "order#create_order"
+    post "user/create_order_item/:order_id", to: "order_item#create_order_item"
+    get "show_food/:id", to: "food#show_food"
     post "owner/create_category", to: "owner_permissions#create_category"
-    put "owner/update_category", to: "owner_permissions#update_category"
+    put "owner/update_category/:id", to: "owner_permissions#update_category"
     delete "owner/delete_category/:id", to: "owner_permissions#delete_category"
     post "owner/add_chef", to: "owner_permissions#add_chef"
     delete "owner/delete_chef/:id", to: "owner_permissions#delete_chef"
+    post "chef/create_food", to: "chef_actions#create_food"
+    put "chef/update_food/:id", to: "chef_actions#update_food"
+    delete "chef/delete_food/:id", to: "chef_actions#delete_food"
+    post "chef/add_ingredient", to: "chef_actions#add_ingredient"
+    delete "chef/delete_ingredient/:id", to: "chef_actions#delete_ingredient"
+    get "chef/show_all_orders", to: "chef_actions#show_all_orders"
+    get "chef/show_pending_orders", to: "chef_actions#show_pending_orders"
+    put "chef/update_order_status/:id", to: "chef_actions#update_order_status"
   end
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
