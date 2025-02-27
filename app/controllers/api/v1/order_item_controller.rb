@@ -1,7 +1,7 @@
 module Api
   module V1
     class OrderItemController < ApplicationController
-      before_action :authenticate_user!, only: [:create_order_item]
+      before_action :authenticate_user!, only: [ :create_order_item ]
 
       def create_order_item
         order = Order.find_by(id: params[:order_id])
@@ -13,7 +13,7 @@ module Api
         chef = assign_chef(food)
         return render json: { status: 404, message: "No available chef." }, status: :not_found if chef.nil?
 
-        order_item = OrderItem.new(order_item_params.merge(order_id: order.id, price: calculate_price(food), chef_id: chef.id , status: "pending"))
+        order_item = OrderItem.new(order_item_params.merge(order_id: order.id, price: calculate_price(food), chef_id: chef.id, status: "pending"))
 
         if order_item.save
           render json: { status: 201, message: "Order item created successfully.", data: order_item }, status: :created

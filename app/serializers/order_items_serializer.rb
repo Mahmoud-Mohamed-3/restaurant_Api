@@ -6,4 +6,3 @@ class OrderItemsSerializer
     object.food.name if object.food
   end
 end
-

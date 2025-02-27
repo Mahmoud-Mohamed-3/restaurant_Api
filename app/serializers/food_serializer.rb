@@ -1,6 +1,6 @@
 class FoodSerializer
   include JSONAPI::Serializer
-  attributes  :name , :description , :price , :category_id ,:id, :ingredients
+  attributes :name, :description, :price, :category_id, :id, :ingredients
 
   private
   def ingredients

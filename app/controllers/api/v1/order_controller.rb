@@ -1,7 +1,7 @@
 module Api
   module V1
     class OrderController < ApplicationController
-      before_action :authenticate_user!, only: [:create_order]
+      before_action :authenticate_user!, only: [ :create_order ]
 
       def create_order
         order = Order.new(user_id: current_user.id, order_time: Time.now, order_status: "pending")
