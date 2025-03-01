@@ -7,21 +7,21 @@ class Chefs::SessionsController < Devise::SessionsController
   private
 
   # Handle successful login response
-  def respond_with(current_user, _opts = {})
+  def respond_with(current_chef, _opts = {})
     render json: {
       status: {
         code: 200,
         message: "Logged in successfully.",
-        data: { chef: ChefSerializer.new(current_user).serializable_hash[:data][:attributes] }
+        data: { chef: ChefSerializer.new(current_chef).serializable_hash[:data][:attributes] }
       }
     }, status: :ok
   end
 
   # Handle logout response
   def respond_to_on_destroy
-    current_user = find_chef_from_token
+    current_chef = find_chef_from_token
 
-    if current_user
+    if current_chef
       render json: { status: 200, message: "Logged out successfully." }, status: :ok
     else
       render json: { status: 401, message: "Couldn't find an active session." }, status: :unauthorized

@@ -1,11 +1,11 @@
 class OrderSerializer
   include JSONAPI::Serializer
-  attributes :status, :total_price, :user_id, :id, :order_time
-  has_many :order_items
+
+  attributes :order_status, :total_price, :user_id, :id, :order_time
   belongs_to :user
-  belongs_to :chef
-  private
-  def order_items
+
+  # Remove the `has_many :order_items` declaration to avoid auto-serialization
+  attribute :order_items do |object|
     object.order_items.map do |order_item|
       {
         id: order_item.id,
@@ -13,9 +13,6 @@ class OrderSerializer
         order_id: order_item.order_id,
         quantity: order_item.quantity,
         price: order_item.price,
-        created_at: order_item.created_at,
-        updated_at: order_item.updated_at,
-        chef_id: order_item.chef_id,
         status: order_item.status
       }
     end

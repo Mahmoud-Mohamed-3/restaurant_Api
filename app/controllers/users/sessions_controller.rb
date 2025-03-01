@@ -17,7 +17,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # Handle logout response
   def respond_to_on_destroy
-    current_user = find_chef_from_token
+    current_user = find_user_from_token
 
     if current_user
       render json: { status: 200, message: "Logged out successfully." }, status: :ok
@@ -33,13 +33,11 @@ class Users::SessionsController < Devise::SessionsController
     token = request.headers["Authorization"].split(" ").last
     begin
       jwt_payload = JWT.decode(token, Rails.application.credentials.devise_jwt_secret_key!).first
-      Chef.find_by(id: jwt_payload["sub"])
+      User.find_by(id: jwt_payload["sub"])
     rescue JWT::DecodeError, ActiveRecord::RecordNotFound
       nil
     end
   end
-
-  # Allow authentication with email or phone number
   def sign_in_params
     params.require(:user).permit(:login, :password)
   end

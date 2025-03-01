@@ -65,14 +65,21 @@ module Api
 
       def update_order_status
         order_item = OrderItem.find_by(id: params[:id])
+
         if order_item.nil?
-          render json: { status: 404, message: "Order not found." }, status: :not_found
-        elsif order_item.update(update_order_params)
-          render json: { status: 200, message: "Order status updated successfully.", data: order_item }
+          return render json: { status: 404, message: "Order item not found." }, status: :not_found
+        end
+
+        if order_item.update(update_order_params)
+          order_item.order.update_total_price_and_status # Ensure this method is called on the order
+          order_item.order.save if order_item.order.changed?
+
+          render json: { status: 200, message: "Order item updated successfully." }, status: :ok
         else
-          render json: { status: 422, message: "Order status update failed.", errors: order_item.errors.full_messages }, status: :unprocessable_entity
+          render json: { status: 422, message: "Failed to update order item.", errors: order_item.errors.full_messages }, status: :unprocessable_entity
         end
       end
+
       private
       def update_order_params
         params.require(:order_item).permit(:status)

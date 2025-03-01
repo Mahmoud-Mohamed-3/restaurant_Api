@@ -2,7 +2,7 @@ module Api
   module V1
     class OrderController < ApplicationController
       before_action :authenticate_user!, only: [ :create_order ]
-
+      before_action :authenticate_owner!, only: [ :all_orders ]
       def create_order
         order = Order.new(user_id: current_user.id, order_time: Time.now, order_status: "pending")
         if order.save
@@ -12,7 +12,10 @@ module Api
         end
       end
 
-      private
+      def all_orders
+        orders = Order.all
+        render json: { status: 200, message: "Orders fetched successfully.", data: OrderSerializer.new(orders.map { |order| order }) }
+      end
 
       # def order_params
       #   params.require(:order).permit(:status, order_items_attributes: [:food_id, :quantity, :chef_id])

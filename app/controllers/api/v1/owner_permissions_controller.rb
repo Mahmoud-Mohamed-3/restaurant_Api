@@ -3,11 +3,15 @@ module Api
     class OwnerPermissionsController < ApplicationController
       before_action :authenticate_owner!
       def create_category
-        category = Category.new(category_params)
-        if category.save
-          render json: { status: 201, message: "Category created successfully.", data: category }, status: :created
+        @category = Category.new(category_params)
+        if @category.save
+          render json: {
+            status: 201,
+            message: "Category created successfully.",
+            data: @category
+          }
         else
-          render json: { status: 422, message: "Category creation failed.", errors: category.errors.full_messages }, status: :unprocessable_entity
+          render json: { status: 400, message: "Error creating category", errors: @category.errors.full_messages }, status: :bad_request
         end
       end
 
@@ -34,11 +38,11 @@ module Api
       end
 
       def add_chef
-        chef = Chef.new(chef_params)
-        if chef.save
-          render json: { status: 201, message: "Chef created successfully.", data: chef }, status: :created
+        @chef = Chef.new(chef_params)
+        if @chef.save
+          render json: { status: 201, message: "Chef created successfully.", data: @chef }, status: :created
         else
-          render json: { status: 422, message: "Chef creation failed.", errors: chef.errors.full_messages }, status: :unprocessable_entity
+          render json: { status: 422, message: "Chef creation failed.", errors: @chef.errors.full_messages }, status: :unprocessable_entity
         end
       end
       def delete_chef
@@ -54,7 +58,7 @@ module Api
       private
 
       def category_params
-        params.require(:category).permit(:title)
+        params.require(:category).permit(:title, :image)
       end
 
       def chef_params

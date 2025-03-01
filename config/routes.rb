@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :owners, controllers: { sessions: "owners/sessions", registrations: "owners/registrations" }
   devise_for :chefs, controllers: { sessions: "chefs/sessions", registrations: "chefs/registrations" }
-  devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations" }
+  devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations" , passwords: "users/passwords"}
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api do
   namespace :v1 do
@@ -21,6 +21,13 @@ Rails.application.routes.draw do
     get "chef/show_all_orders", to: "chef_actions#show_all_orders"
     get "chef/show_pending_orders", to: "chef_actions#show_pending_orders"
     put "chef/update_order_status/:id", to: "chef_actions#update_order_status"
+    get "user/show_order/:id", to: "user_actions#get_order"
+    get "completed_orders", to: "completed_order#get_all_completed_orders"
+    get "user/completed_orders", to: "completed_order#get_user_completed_orders"
+    put "user/complete_order/:order_id", to: "completed_order#complete_order"
+    get "owner/all_orders", to: "order#all_orders"
+    get "categories", to: "user_actions#get_categories"
+    get "category_food/:id", to: "user_actions#get_category_food"
   end
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

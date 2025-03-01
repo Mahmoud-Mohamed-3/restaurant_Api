@@ -7,21 +7,21 @@ class Owners::SessionsController < Devise::SessionsController
   private
 
   # Handle successful login response
-  def respond_with(current_user, _opts = {})
+  def respond_with(current_owner, _opts = {})
     render json: {
       status: {
         code: 200,
         message: "Logged in successfully.",
-        data: { owner: OwnerSerializer.new(current_user).serializable_hash[:data][:attributes] }
+        data: { owner: OwnerSerializer.new(current_owner).serializable_hash[:data][:attributes] }
       }
     }, status: :ok
   end
 
   # Handle logout response
   def respond_to_on_destroy
-    current_user = find_owner_from_token
+    current_owner = find_owner_from_token
 
-    if current_user
+    if current_owner
       render json: { status: 200, message: "Logged out successfully." }, status: :ok
     else
       render json: { status: 401, message: "Couldn't find an active session." }, status: :unauthorized

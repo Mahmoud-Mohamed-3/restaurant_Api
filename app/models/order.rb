@@ -1,13 +1,31 @@
 class Order < ApplicationRecord
-  has_many :order_items
+  has_many :order_items, dependent: :destroy
   belongs_to :user
+  has_many :completed_orders, dependent: :destroy
 
-  after_create :assign_chefs_to_order_items
   enum :order_status, { pending: "pending", completed: "completed" }
+
+  def update_total_price_and_status
+    self.total_price = order_items.sum { |item| item.price }
+
+    if order_items.exists? && order_items.all? { |item| item.status == "ready" }
+      self.order_status = "completed"
+      move_to_completed_orders unless completed_orders.exists? # Prevent duplicate completed orders
+    else
+      self.order_status = "pending"
+    end
+    save!
+  end
+
   private
 
-  def assign_chefs_to_order_items
-    total_price = order_items.sum(&:price)
-    update(total_price: total_price)
+  def move_to_completed_orders
+    # Only create a new completed order if none exists already
+    CompletedOrder.create!(
+      order: self,
+      user: user,
+      total_price: total_price,
+      completed_at: Time.current
+    )
   end
 end
