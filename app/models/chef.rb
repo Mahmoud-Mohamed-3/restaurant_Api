@@ -3,6 +3,10 @@ class Chef < ApplicationRecord
   has_many :foods, through: :order_items
   has_many :orders, through: :order_items
   belongs_to :category
+  has_one_attached :profile_image
+
+  validate :acceptable_image
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   include Devise::JWT::RevocationStrategies::JTIMatcher
@@ -17,4 +21,16 @@ class Chef < ApplicationRecord
       where(conditions.to_h).first
     end
   end
+
+  private
+  def acceptable_image
+    unless profile_image.byte_size <= 1.megabyte
+      errors.add(:profile_image, "is too big. Max size is 1MB.")
+    end
+    acceptable_types = [ "image/jpeg", "image/png", "image/jpg" ]
+    unless acceptable_types.include?(profile_image.content_type)
+      errors.add(:profile_image, "must be a JPEG, PNG, or JPG.")
+    end
+  end
+
 end

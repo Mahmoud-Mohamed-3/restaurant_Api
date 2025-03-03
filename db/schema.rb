@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_01_032136) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_01_114107) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,6 +46,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_032136) do
     t.string "title", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
   end
 
   create_table "chefs", force: :cascade do |t|
@@ -159,13 +160,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_032136) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "chefs", "categories"
+  add_foreign_key "chefs", "categories", on_delete: :cascade
   add_foreign_key "completed_orders", "orders"
   add_foreign_key "completed_orders", "users"
-  add_foreign_key "foods", "categories" ,on_delete: :nullify
-  add_foreign_key "ingredients", "foods"
+  add_foreign_key "foods", "categories", on_delete: :cascade
+  add_foreign_key "ingredients", "foods", on_delete: :cascade
   add_foreign_key "order_items", "chefs"
-  add_foreign_key "order_items", "foods"
+  add_foreign_key "order_items", "foods", on_delete: :cascade
   add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "users"
 end

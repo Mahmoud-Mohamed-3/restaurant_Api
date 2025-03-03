@@ -45,6 +45,17 @@ module Api
           render json: { status: 422, message: "Chef creation failed.", errors: @chef.errors.full_messages }, status: :unprocessable_entity
         end
       end
+
+      def update_chef
+        chef = Chef.find_by(id: params[:id])
+        if chef.nil?
+          render json: { status: 404, message: "Chef not found." }, status: :not_found
+        elsif chef.update(chef_params)
+          render json: { status: 200, message: "Chef updated successfully.", data: chef }
+        else
+          render json: { status: 422, message: "Chef update failed.", errors: chef.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
       def delete_chef
         chef = Chef.find_by(id: params[:id])
         if chef.nil?
@@ -55,14 +66,19 @@ module Api
           render json: { status: 500, message: "Chef deletion failed." }, status: :internal_server_error
         end
       end
+
+      def show_all_chefs
+        chefs = Chef.all
+        render json: { status: 200, message: "All chefs fetched successfully.", data: chefs.map{|chef| ChefSerializer.new(chef)} }
+      end
       private
 
       def category_params
-        params.require(:category).permit(:title, :image)
+        params.require(:category).permit(:title, :image, :description )
       end
 
       def chef_params
-        params.require(:chef).permit(:email, :password, :first_name, :last_name, :phone_number, :age, :salary, :category_id)
+        params.require(:chef).permit(:email, :password, :first_name, :last_name, :phone_number, :age, :salary, :category_id , :profile_image)
       end
     end
   end

@@ -24,14 +24,13 @@ module Api
 
 
 
-
-
       def get_category_food
         category = Category.find_by(id: params[:id])
         category_food = category.foods
         return render json: { status: 404, message: "Category not found." }, status: :not_found if category.nil?
 
-        render json: { status: 200, message: "Category fetched successfully.", data:category_food.map { |food| FoodSerializer.new(food) } }
+        # render json: { status: 200, message: "Category fetched successfully.", data:category_food.map { |food| FoodSerializer.new(food) } }
+        render json: { status: 200, message: "Category fetched successfully.", foods: category_food.map{|food | FoodSerializer.new(food)} , category: CategorySerializer.new(category) }
 
       end
     end

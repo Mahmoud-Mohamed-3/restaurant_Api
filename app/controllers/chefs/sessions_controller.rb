@@ -12,7 +12,7 @@ class Chefs::SessionsController < Devise::SessionsController
       status: {
         code: 200,
         message: "Logged in successfully.",
-        data: { chef: ChefSerializer.new(current_chef).serializable_hash[:data][:attributes] }
+        data: { chef: ChefSerializer.new(current_chef) }
       }
     }, status: :ok
   end
