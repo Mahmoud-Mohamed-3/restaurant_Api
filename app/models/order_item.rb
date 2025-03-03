@@ -17,4 +17,4 @@ class OrderItem < ApplicationRecord
       order.update_total_price_and_status
       order.save if order.changed? # Save only if changes are made
     end
-  end
+end

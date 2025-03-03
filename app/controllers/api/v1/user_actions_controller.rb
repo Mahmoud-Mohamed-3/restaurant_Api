@@ -1,7 +1,7 @@
 module Api
   module V1
     class UserActionsController < ApplicationController
-      before_action :authenticate_user! , only: [  :get_order ]
+      before_action :authenticate_user!, only: [  :get_order ]
 
       def get_your_orders
         orders = current_user.orders
@@ -30,8 +30,7 @@ module Api
         return render json: { status: 404, message: "Category not found." }, status: :not_found if category.nil?
 
         # render json: { status: 200, message: "Category fetched successfully.", data:category_food.map { |food| FoodSerializer.new(food) } }
-        render json: { status: 200, message: "Category fetched successfully.", foods: category_food.map{|food | FoodSerializer.new(food)} , category: CategorySerializer.new(category) }
-
+        render json: { status: 200, message: "Category fetched successfully.", foods: category_food.map { |food | FoodSerializer.new(food) }, category: CategorySerializer.new(category) }
       end
     end
   end

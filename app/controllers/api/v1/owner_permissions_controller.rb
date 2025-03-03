@@ -69,16 +69,16 @@ module Api
 
       def show_all_chefs
         chefs = Chef.all
-        render json: { status: 200, message: "All chefs fetched successfully.", data: chefs.map{|chef| ChefSerializer.new(chef)} }
+        render json: { status: 200, message: "All chefs fetched successfully.", data: chefs.map { |chef| ChefSerializer.new(chef) } }
       end
       private
 
       def category_params
-        params.require(:category).permit(:title, :image, :description )
+        params.require(:category).permit(:title, :image, :description)
       end
 
       def chef_params
-        params.require(:chef).permit(:email, :password, :first_name, :last_name, :phone_number, :age, :salary, :category_id , :profile_image)
+        params.require(:chef).permit(:email, :password, :first_name, :last_name, :phone_number, :age, :salary, :category_id, :profile_image)
       end
     end
   end

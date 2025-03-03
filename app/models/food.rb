@@ -1,10 +1,10 @@
 class Food < ApplicationRecord
-  belongs_to :category , optional: true, dependent:  :destroy
+  belongs_to :category, optional: true, dependent:  :destroy
   has_many :ingredients, dependent: :destroy
   has_many :order_items, dependent: :destroy
   has_many :orders, through: :order_items
   has_many :chefs, through: :order_items
-  has_one_attached :image , dependent: :destroy
+  has_one_attached :image, dependent: :destroy
 
   validate :acceptable_image
 

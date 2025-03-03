@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :owners, controllers: { sessions: "owners/sessions", registrations: "owners/registrations" }
   devise_for :chefs, controllers: { sessions: "chefs/sessions", registrations: "chefs/registrations" }
-  devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations" , passwords: "users/passwords"}
+  devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations", passwords: "users/passwords" }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api do
   namespace :v1 do

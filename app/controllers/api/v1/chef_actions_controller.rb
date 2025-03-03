@@ -84,7 +84,7 @@ module Api
         params.require(:order_item).permit(:status)
       end
       def food_params
-        params.require(:food).permit(:name, :description, :price , :image)
+        params.require(:food).permit(:name, :description, :price, :image)
       end
       def ingredient_params
         params.require(:ingredient).permit(:name, :food_id)

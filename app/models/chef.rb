@@ -32,5 +32,4 @@ class Chef < ApplicationRecord
       errors.add(:profile_image, "must be a JPEG, PNG, or JPG.")
     end
   end
-
 end
