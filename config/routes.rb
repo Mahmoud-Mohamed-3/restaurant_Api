@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     post "user/create_order_item/:order_id", to: "order_item#create_order_item"
     get "user/your_orders", to: "user_actions#get_your_orders"
     get "show_food/:id", to: "food#show_food"
+    get "recommended_food", to: "food#recommended_items"
     post "owner/create_category", to: "owner_permissions#create_category"
     put "owner/update_category/:id", to: "owner_permissions#update_category"
     delete "owner/delete_category/:id", to: "owner_permissions#delete_category"

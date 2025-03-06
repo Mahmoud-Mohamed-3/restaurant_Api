@@ -9,6 +9,11 @@ module Api
           render json: { status: 200, message: "Food fetched successfully.", data: FoodSerializer.new(food) }
         end
       end
+
+      def recommended_items
+        @recommended = Food.all.sample(5)
+        render json: { status: 200, message: "Recommended items fetched successfully.", data: @recommended.map { |food| RecommendedFoodSerializer.new(food) } }
+      end
     end
   end
 end
