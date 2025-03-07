@@ -3,7 +3,8 @@ class User < ApplicationRecord
   has_many :order_items, through: :orders
   has_many :foods, through: :order_items
   has_many :completed_orders, dependent: :destroy
-
+  has_many :tables, dependent: :destroy
+  has_many :reservations, dependent: :destroy
   include Devise::JWT::RevocationStrategies::JTIMatcher
   devise :database_authenticatable, :registerable, :recoverable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 

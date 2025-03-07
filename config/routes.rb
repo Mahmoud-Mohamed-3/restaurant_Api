@@ -33,6 +33,10 @@ Rails.application.routes.draw do
     get "owner/all_orders", to: "order#all_orders"
     get "categories", to: "user_actions#get_categories"
     get "category_food/:id", to: "user_actions#get_category_food"
+    post "owner/add_table", to: "tables#create"
+    post "user/book_table/:id", to: "reservations#create"
+    get "/show_tables", to: "tables#index"
+    resources :reservations, only: [ :index ]
   end
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
