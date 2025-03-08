@@ -1,4 +1,6 @@
 class Food < ApplicationRecord
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
   belongs_to :category, optional: true, dependent:  :destroy
   has_many :ingredients, dependent: :destroy
   has_many :order_items, dependent: :destroy
@@ -20,5 +22,25 @@ class Food < ApplicationRecord
 
   def category_name
     category.title
+  end
+
+
+
+  settings index: { number_of_shards: 1, number_of_replicas: 0 } do
+    settings analysis: {
+      normalizer: {
+        lowercase_normalizer: {
+          type: "custom",
+          filter: [ "lowercase" ]
+        }
+      }
+    }
+
+    mappings dynamic: "false" do
+      indexes :name, type: "keyword", copy_to: "all_fields", fields: {
+        lower: { type: "keyword", normalizer: "lowercase_normalizer" }
+      }
+      indexes :search_all, type: "text", analyzer: "standard"
+    end
   end
 end

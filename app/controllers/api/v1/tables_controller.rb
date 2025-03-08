@@ -4,9 +4,12 @@ module Api
       before_action :authenticate_owner!, only: [ :create ]
 
       def index
-        @tables = Table.all
-        render json: { status: 200, message: "Tables retrieved successfully", data: @tables.each { |table| TableSerializer.new(table) } }
-        # render @tables.each { |table| TableSerializer.new(table) }
+        tables = Table.all
+        render json: {
+          status: 200,
+          message: "Tables retrieved successfully",
+          data: tables.map { |table| TableSerializer.new(table).serializable_hash }
+        }
       end
 
       def create

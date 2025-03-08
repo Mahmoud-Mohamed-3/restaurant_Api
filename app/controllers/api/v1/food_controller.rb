@@ -9,6 +9,25 @@ module Api
           render json: { status: 200, message: "Food fetched successfully.", data: FoodSerializer.new(food) }
         end
       end
+      def search_food
+        query = params[:query]
+        if query
+          @food = Food.search(
+            query: {
+              wildcard: {
+                "name.lower": {
+                  value: "*#{query.downcase}*"  # Matches any name containing the query letters
+                }
+              }
+            },
+            size: 4
+          ).records.to_a
+        end
+        render json: { status: 200, message: "Food fetched successfully.", data: @food.map { |food| FoodForSearchSerializer.new(food) } }
+      end
+
+
+
 
       def recommended_items
         @recommended = Food.all.sample(5)

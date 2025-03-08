@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     post "owner/add_table", to: "tables#create"
     post "user/book_table/:id", to: "reservations#create"
     get "/show_tables", to: "tables#index"
+    post "food/search/:query", to: "food#search_food"
     resources :reservations, only: [ :index ]
   end
   end

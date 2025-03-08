@@ -8,9 +8,14 @@ module Api
 
       # List all reservations (optional)
       def index
-        @reservations = Reservation.all
-        render json: { status: 200, message: "Reservations retrieved successfully", data: @reservations.each { |reservation| ReservationsSerializer.new(reservation) } }
+        reservations = Reservation.all
+        render json: {
+          status: 200,
+          message: "Reservations retrieved successfully",
+          data: reservations.map { |reservation| ReservationsSerializer.new(reservation).serializable_hash }
+        }
       end
+
 
       # Create a new reservation
       def create
