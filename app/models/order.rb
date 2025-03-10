@@ -16,7 +16,9 @@ class Order < ApplicationRecord
     end
     save!
   end
-
+  def order_items
+    OrderItem.where(order_id: id)
+  end
   private
 
   def move_to_completed_orders

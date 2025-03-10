@@ -16,4 +16,7 @@ class Reservation < ApplicationRecord
   def table_name
     table.table_name
   end
+  def num_of_seats
+    table.num_of_seats
+  end
 end

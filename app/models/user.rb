@@ -10,6 +10,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :phone_number, presence: true, uniqueness: true, length: { is: 11 }
+  validates :password, presence: true, length: { minimum: 8 }
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
     if (login = conditions.delete(:login))

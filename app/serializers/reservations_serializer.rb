@@ -1,7 +1,10 @@
 class ReservationsSerializer < ActiveModel::Serializer
-  attributes :id, :booked_from, :booked_to, :user_id, :table_id, :table_name
+  attributes :id, :booked_from, :booked_to, :table_name, :num_of_seats
 
   def table_name
     object.table_name
+  end
+  def num_of_seats
+    object.num_of_seats
   end
 end
