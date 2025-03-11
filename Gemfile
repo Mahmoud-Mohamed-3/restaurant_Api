@@ -51,3 +51,5 @@ gem "elasticsearch-persistence", "~> 8.0"
 gem "active_model_serializers"
 
 gem "devise", "~> 4.9"
+
+gem "kaminari"

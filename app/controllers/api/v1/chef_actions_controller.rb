@@ -51,10 +51,30 @@ module Api
           render json: { status: 500, message: "Ingredient deletion failed." }, status: :internal_server_error
         end
       end
-
+      def get_your_category
+        cat_id = current_chef.category_id
+        @category = Category.find_by(id: cat_id)
+        if @category.nil?
+          render json: { status: 404, message: "Category not found." }, status: :not_found
+        else
+          render json: { status: 200, message: "Category fetched successfully.", data: ShowCategoryForChefSerializer.new(@category) }
+        end
+      end
       def show_all_orders
-        orders = current_chef.order_items
-        render json: { status: 200, message: "Assigned orders fetched successfully.", data: OrderItemsSerializer.new(orders) }
+        # Paginate orders with 10 items per page
+        orders = current_chef.order_items.page(params[:page]).per(10)
+        total_count = current_chef.order_items.count
+
+        render json: {
+          status: 200,
+          message: "Assigned orders fetched successfully.",
+          data: OrderItemsSerializer.new(orders),
+          pagination: {
+            current_page: orders.current_page,
+            total_pages: orders.total_pages,
+            total_count: total_count
+          }
+        }
       end
 
       def show_pending_orders
