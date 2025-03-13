@@ -4,23 +4,40 @@ module Api
       before_action :authenticate_chef!
       def create_food
         @category_id = current_chef.category_id
-        @food = Food.new(food_params.merge(category_id: @category_id))
+        @food = Food.new(food_params.except(:ingredients).merge(category_id: @category_id))
+
         if @food.save
+          ingredients = params[:food][:ingredients]
+          if ingredients.is_a?(Array) && ingredients.present?
+            ingredients.each do |ingredient_name|
+              @food.ingredients.create!(name: ingredient_name.strip)
+            end
+          end
+
           render json: { status: 201, message: "Food created successfully.", data: @food }, status: :created
         else
           render json: { status: 422, message: "Food creation failed.", errors: @food.errors.full_messages }, status: :unprocessable_entity
         end
       end
+
       def update_food
         food = Food.find_by(id: params[:id])
-        @category_id = current_chef.category_id
-        if food.nil?
-          render json: { status: 404, message: "Food not found." }, status: :not_found
-        elsif food.update(food_params.merge(category_id: @category_id))
-          render json: { status: 200, message: "Food updated successfully.", data: food }
+
+        return render json: { status: 404, message: "Food not found." }, status: :not_found if food.nil?
+        food.update(food_params.except(:ingredients))
+
+        food.ingredients.destroy_all
+
+        ingredients = params[:food][:ingredients]
+        if ingredients.is_a?(Array) && ingredients.present?
+          ingredients.each do |ingredient_name|
+            food.ingredients.create!(name: ingredient_name.strip)
+          end
         else
-          render json: { status: 422, message: "Food update failed.", errors: food.errors.full_messages }, status: :unprocessable_entity
+          food.ingredients.create!(name: ingredients.strip) if ingredients.present?
         end
+
+        render json: { status: 200, message: "Food updated successfully.", data: food }
       end
 
       def delete_food
@@ -51,6 +68,8 @@ module Api
           render json: { status: 500, message: "Ingredient deletion failed." }, status: :internal_server_error
         end
       end
+
+
       def get_your_category
         cat_id = current_chef.category_id
         @category = Category.find_by(id: cat_id)
@@ -104,8 +123,9 @@ module Api
         params.require(:order_item).permit(:status)
       end
       def food_params
-        params.require(:food).permit(:name, :description, :price, :image)
+        params.require(:food).permit(:name, :description, :price, :image, ingredients: [])
       end
+
       def ingredient_params
         params.require(:ingredient).permit(:name, :food_id)
       end

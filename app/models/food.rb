@@ -1,7 +1,7 @@
 class Food < ApplicationRecord
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
-  belongs_to :category, optional: true, dependent:  :destroy
+  belongs_to :category, optional: true
   has_many :ingredients, dependent: :destroy
   has_many :order_items, dependent: :destroy
   has_many :orders, through: :order_items

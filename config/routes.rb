@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     put "chef/update_food/:id", to: "chef_actions#update_food"
     delete "chef/delete_food/:id", to: "chef_actions#delete_food"
     post "chef/add_ingredient", to: "chef_actions#add_ingredient"
+    put "chef/edit_ingredient/:id", to: "chef_actions#edit_ingredient"
     delete "chef/delete_ingredient/:id", to: "chef_actions#delete_ingredient"
     get "chef/show_all_orders", to: "chef_actions#show_all_orders"
     get "chef/show_pending_orders", to: "chef_actions#show_pending_orders"

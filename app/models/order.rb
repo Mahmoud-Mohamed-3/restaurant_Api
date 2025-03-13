@@ -3,6 +3,7 @@ class Order < ApplicationRecord
   belongs_to :user
   has_many :completed_orders, dependent: :destroy
 
+
   enum :order_status, { pending: "pending", completed: "completed" }
 
   def update_total_price_and_status
