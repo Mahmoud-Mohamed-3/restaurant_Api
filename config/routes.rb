@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     get "chef/get_your_category", to: "chef_actions#get_your_category"
     get "chefs", to: "chefs#show_chefs_for_users"
     get "chef", to: "chefs#get_current_chef"
+    get "chef/stats", to: "chef_actions#chef_stats"
     get "user/show_order/:id", to: "user_actions#get_order"
     get "completed_orders", to: "completed_order#get_all_completed_orders"
     get "user/completed_orders", to: "completed_order#get_user_completed_orders"
