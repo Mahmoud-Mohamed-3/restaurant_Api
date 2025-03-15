@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_07_230156) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_15_212141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -157,6 +157,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_230156) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "table_name"
+    t.index ["table_name"], name: "index_tables_on_table_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -180,7 +181,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_230156) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chefs", "categories", on_delete: :cascade
-  add_foreign_key "completed_orders", "orders"
+  add_foreign_key "completed_orders", "orders", on_delete: :cascade
   add_foreign_key "completed_orders", "users"
   add_foreign_key "foods", "categories", on_delete: :cascade
   add_foreign_key "ingredients", "foods", on_delete: :cascade

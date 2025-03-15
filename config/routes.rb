@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :owners, controllers: { sessions: "owners/sessions", registrations: "owners/registrations" }
+  devise_for :owners, controllers: { sessions: "owners/sessions", registrations: "owners/registrations", passwords: "owners/passwords" }
   devise_for :chefs, controllers: { sessions: "chefs/sessions", registrations: "chefs/registrations" }
   devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations", passwords: "users/passwords" }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -20,6 +20,9 @@ Rails.application.routes.draw do
     delete "owner/delete_chef/:id", to: "owner_permissions#delete_chef"
     put "owner/update_chef/:id", to: "owner_permissions#update_chef"
     get "owner/show_all_chefs", to: "owner_permissions#show_all_chefs"
+    get "owner/show_all_categories", to: "owner_permissions#show_all_categories"
+    get "category/:id", to: "owner_permissions#get_category"
+    get "category_chef/:id", to: "chefs#get_category_chef"
     post "chef/create_food", to: "chef_actions#create_food"
     put "chef/update_food/:id", to: "chef_actions#update_food"
     delete "chef/delete_food/:id", to: "chef_actions#delete_food"
@@ -41,9 +44,16 @@ Rails.application.routes.draw do
     get "categories", to: "user_actions#get_categories"
     get "category_food/:id", to: "user_actions#get_category_food"
     post "owner/add_table", to: "tables#create"
+    get "owner/show_tables", to: "tables#show_tables_for_owner"
+    put "owner/update_table/:id", to: "tables#update_table"
+    delete "owner/delete_table/:id", to: "tables#destroy_table"
     post "user/book_table/:id", to: "reservations#create"
     get "/show_tables", to: "tables#index"
     post "food/search/:query", to: "food#search_food"
+    get "stats", to: "owner_stats#overall_stats"
+    get "category_stats", to: "owner_stats#category_stats"
+    get "owner/user_stats", to: "owner_stats#user_stats"
+    get "reservation_stats", to: "owner_stats#reservations_stats"
     resources :reservations, only: [ :index ]
   end
   end

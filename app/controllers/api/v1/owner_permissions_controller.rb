@@ -37,6 +37,17 @@ module Api
         end
       end
 
+      def get_category
+        category = Category.find_by(id: params[:id])
+        if category.nil?
+          render json: { status: 404, message: "Category not found." }, status: :not_found
+        else
+          render json: { status: 200, message: "Category fetched successfully.", data: CategorySerializer.new(category) }
+        end
+      end
+
+
+
       def add_chef
         @chef = Chef.new(chef_params)
         if @chef.save
@@ -47,7 +58,9 @@ module Api
       end
 
       def update_chef
-        chef = Chef.find_by(id: params[:id])
+        category = Category.find_by(id: params[:id])
+        chef = category.chef
+        # chef = Chef.find_by(id: params[:id])
         if chef.nil?
           render json: { status: 404, message: "Chef not found." }, status: :not_found
         elsif chef.update(chef_params)
@@ -70,6 +83,11 @@ module Api
       def show_all_chefs
         chefs = Chef.all
         render json: { status: 200, message: "All chefs fetched successfully.", data: chefs.map { |chef| ChefSerializer.new(chef) } }
+      end
+
+      def show_all_categories
+        categories = Category.all
+        render json: { status: 200, message: "All categories fetched successfully.", data: categories.map { |category| CategoryForOwnerSerializer.new(category) } }
       end
       private
 
